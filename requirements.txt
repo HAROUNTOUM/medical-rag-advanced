@@ -1,0 +1,7 @@
+neo4j
+dotenv
+pymupdf
+nltk
+weaviate-client
+ollama
+groq
