@@ -1,6 +1,7 @@
 
+
 class Node(BaseNode):
-    id: str = Field(..., description="Name or human-readable unique identifier")
+    id: str =  (..., description="Name or human-readable unique identifier")
     label: str = Field(..., description=f"Available options are {enum_values}")
     properties: Optional[List[Property]]
 class Relationship(BaseRelationship):
