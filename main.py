@@ -2,7 +2,7 @@ from src.ingestion.loader import ingest_pdf
 from src.llm.llm_client import llm_call
 import sys
 from langchain_experimental.graph_transformers import LLMGraphTransformer
-from langchain_groq import ChatGroq
+from langchain_ollama import ChatOllama
 from src.graphdb.neo4j_client import Neo4jClient
 from src.ingestion.graph_extractor import build_knowledge_graph
 from src.retrieval.graph_retriever import search_knowledge_graph
@@ -40,7 +40,7 @@ def main():
             "EXPERIENCES",
             "LOCATED_IN",
         ]
-        llm = ChatGroq(model_name="llama-3.3-70b-versatile", temperature=0.0)
+        llm = ChatOllama(model="llama3.2:latest", temperature=0.0)
         transformer = LLMGraphTransformer(
             llm=llm,
             allowed_nodes=allowed_nodes,
