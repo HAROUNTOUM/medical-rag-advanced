@@ -40,7 +40,7 @@ def main():
             "EXPERIENCES",
             "LOCATED_IN",
         ]
-        llm = ChatOllama(model="llama3.2:latest", temperature=0.0)
+        llm = ChatOllama(model="llama3.1:8b", temperature=0.0)
         transformer = LLMGraphTransformer(
             llm=llm,
             allowed_nodes=allowed_nodes,
