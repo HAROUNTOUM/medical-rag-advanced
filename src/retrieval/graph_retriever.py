@@ -5,18 +5,22 @@ from src.llm.llm_client import get_groq_client, LLM_MODEL
 def extract_entities_from_query(query: str) -> list[str]:
     """
     Use the LLM to extract key medical entities from the user's query.
+    Handles potential language differences between query and graph.
     """
     prompt = f"""
     You are an expert medical entity extractor.
-    Extract the key medical entities (e.g., diseases, symptoms, treatments, medications) from the query below.
-    Return ONLY a comma-separated list of entities. Do not add any extra text.
+    The underlying medical knowledge base contains French terminology, but queries may be in English.
+    
+    1. Extract the key medical entities (diseases, symptoms, treatments, etc.) from the query.
+    2. For every English entity found, provide its French equivalent.
+    3. Return ONLY a single comma-separated list of all terms (both English and French).
     
     Query: {query}
     Entities:
     """
     client = get_groq_client()
     response = client.chat.completions.create(
-        model=LLM_MODEL, messages=[{"role": "user", "content": prompt}], max_tokens=100
+        model=LLM_MODEL, messages=[{"role": "user", "content": prompt}], max_tokens=150
     )
     # Process output into a clean list of entities
     entities_text = response.choices[0].message.content
@@ -44,7 +48,7 @@ def search_knowledge_graph(query: str, col=None, top_k: int = 5) -> list[dict]:
         cypher_query = """
         MATCH (n)-[r]-(m)
         WHERE toLower(n.id) CONTAINS toLower($entity) 
-           OR toLower(n.label) CONTAINS toLower($entity)
+           OR any(lbl IN labels(n) WHERE toLower(lbl) CONTAINS toLower($entity))
         RETURN n.id AS source, type(r) AS relationship, m.id AS target
         LIMIT 10
         """
