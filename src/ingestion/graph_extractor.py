@@ -59,5 +59,4 @@ def build_knowledge_graph(file_path: str, transformer: LLMGraphTransformer = Non
         except Exception as e:
             print(f"Warning: Failed to extract graph for chunk {i + 1} due to {e}. Skipping...")
     print("--- Knowledge Graph Construction Complete! ---")
-    graph_store._driver.close()   # add this line
-    print("--- well done RAOUF  ---")
+    graph_store._driver.close() 

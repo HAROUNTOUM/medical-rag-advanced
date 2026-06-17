@@ -20,19 +20,7 @@ retrieval:
 weaviate:
   collection_name: "MedicalBook"  # Weaviate collection name
 
-neo4j:
-  allowed_nodes:
-    - "Person"
-    - "Hospital"
-    - "MedicalCondition"
-    - "Symptom"
-    - "Treatment"
-  allowed_relationships:
-    - "WORKS_AT"
-    - "DIAGNOSES"
-    - "TREATS"
-    - "EXPERIENCES"
-    - "LOCATED_IN"
+neo4j: {}
 
 api:
   host: "0.0.0.0"
