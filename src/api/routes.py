@@ -8,7 +8,6 @@ router = APIRouter()
 # 1. Define Request/Response schemas
 class QuestionRequest(BaseModel):
     query: str
-    top_k: int = 5
 
 
 class AnswerResponse(BaseModel):

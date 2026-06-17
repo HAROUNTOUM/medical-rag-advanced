@@ -13,8 +13,8 @@ class WeaviateClient:
     """
 
     def __init__(self):
-        self.url = os.getenv("WEAVIATE_URL")
-        self.api_key = os.getenv("WEAVIATE_API_KEY")
+        self.url = os.getenv("WEAVIATE_URL", "").strip('"')
+        self.api_key = os.getenv("WEAVIATE_API_KEY", "").strip('"')
         self.client = None
 
         if not self.url:

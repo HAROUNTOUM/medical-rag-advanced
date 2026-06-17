@@ -9,9 +9,9 @@ load_dotenv(find_dotenv())
 
 class Neo4jClient:
     def __init__(self):
-        self.uri = os.getenv("NEO4J_URI")
-        self.user = os.getenv("NEO4J_USERNAME")
-        self.password = os.getenv("NEO4J_PASSWORD")
+        self.uri = os.getenv("NEO4J_URI", "").strip('"')
+        self.user = os.getenv("NEO4J_USERNAME", "").strip('"')
+        self.password = os.getenv("NEO4J_PASSWORD", "").strip('"')
 
         if not self.uri:
             raise ValueError(
