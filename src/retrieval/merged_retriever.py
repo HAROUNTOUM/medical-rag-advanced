@@ -60,5 +60,18 @@ def merged_graph_vector_retrieve(query: str, collection, top_k: int = 5) -> list
             unique_docs.append(doc)
             seen.add(clean_text)
 
-    # Return a generous context window (up to top_k * 2)
-    return unique_docs[: top_k * 2]
+    # 4. Contextual Compression
+    # Apply compression to the deduplicated results to cut off any remaining irrelevant fluff
+    from src.retrieval.post_processing import compress_context
+
+    final_docs = unique_docs[: top_k * 2]
+    compressed_docs = compress_context(query, final_docs, threshold=0.76)
+
+    # Fallback to returning top documents if compression is too aggressive and wipes everything out
+    if not compressed_docs and final_docs:
+        print(
+            "⚠️ Compression removed all docs. Falling back to uncompressed unique docs."
+        )
+        return final_docs
+
+    return compressed_docs
