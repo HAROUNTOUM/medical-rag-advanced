@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from main import run_agentic_workflow, run_health_checks
+from src.utils.security import check_query_validity
 
 router = APIRouter()
 
@@ -34,8 +35,11 @@ async def ask_agent(request: QuestionRequest):
     - Synthesizes a response
     """
     try:
+        check_query_validity(request.query)
         # We use the common workflow defined in main.py
         answer = run_agentic_workflow(request.query)
         return AnswerResponse(query=request.query, answer=answer)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
