@@ -16,12 +16,21 @@ def merged_graph_vector_retrieve(query: str, collection, top_k: int = 5) -> list
     except Exception as e:
         print(f"⚠️ Graph search failed: {e}")
 
-    # 2. Fetch from Vector Store
+    # 2. Fetch from Vector Store using Multi-Query Expansion
     vector_docs = []
     if collection is not None:
         try:
-            vector_docs = semantic_search_retrieve(query, collection, top_k=top_k)
-            print(f"🔗 Vector search found {len(vector_docs)} results.")
+            from src.query.expansion import expand_query
+
+            variations = expand_query(query)
+            variations.append(query)  # ensure original query is also used
+            print(f"✨ Expanded into {len(variations)} queries for vector search.")
+
+            for var_query in variations:
+                var_docs = semantic_search_retrieve(var_query, collection, top_k=top_k)
+                vector_docs.extend(var_docs)
+
+            print(f"🔗 Vector search generated {len(vector_docs)} multi-query results.")
         except Exception as e:
             print(f"⚠️ Vector search failed: {e}")
     else:

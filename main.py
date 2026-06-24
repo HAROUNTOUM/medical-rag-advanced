@@ -99,7 +99,7 @@ def main():
             return
 
     # Default: Run a sample query through the agentic workflow
-    query = "tell me if omar live in france or not?"
+    query = "What is the best treatment for diabetes?"
     check_query_validity(query)
     print(f"   - Normalized query: {query}")
     result = run_agentic_workflow(query)
