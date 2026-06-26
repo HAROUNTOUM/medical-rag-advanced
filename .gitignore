@@ -6,3 +6,6 @@ data/*.pdf
 *.joblib
 .ipynb_checkpoints/
 ANALYSIS.md
+.gitignore
+docker-compose.prod.yml
+PRODUCTION_GUIDE.md

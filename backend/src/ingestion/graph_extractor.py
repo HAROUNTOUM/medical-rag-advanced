@@ -1,9 +1,11 @@
 import os
 import sys
+
+# تضمن هذه السطور قراءة المسارات بشكل صحيح بعد النقل لـ backend
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
 from langchain_experimental.graph_transformers import LLMGraphTransformer
-from langchain_ollama import ChatOllama                          # <-- local LLM
+from langchain_ollama import ChatOllama  # <-- local LLM
 from dotenv import load_dotenv
 from langchain_core.documents import Document
 from src.chunking.chunker import extract_and_chunk
@@ -13,9 +15,11 @@ load_dotenv()
 
 LLM_MODEL = 'llama3.1:8b'
 
+
 def get_transformer():
     llm = ChatOllama(model=LLM_MODEL, temperature=0)
     return LLMGraphTransformer(llm=llm)
+
 
 def build_knowledge_graph(
     file_path: str,
@@ -27,7 +31,7 @@ def build_knowledge_graph(
     saves them to Neo4j, then stamps every __Entity__ node with doctor_id.
     """
     if transformer is None:
-        transformer = get_transformer()          # use local Ollama by default
+        transformer = get_transformer()  # use local Ollama by default
 
     graph_store = Neo4jGraph()
 
@@ -38,17 +42,24 @@ def build_knowledge_graph(
     for i, chunk in enumerate(raw_chunks):
         if isinstance(chunk, str):
             documents.append(
-                Document(page_content=chunk, metadata={"source": file_path, "chunk_id": i})
+                Document(
+                    page_content=chunk,
+                    metadata={"source": file_path, "chunk_id": i},
+                )
             )
         elif isinstance(chunk, dict):
             page_content = chunk.get("text", "")
             metadata = {k: v for k, v in chunk.items() if k != "text"}
             metadata["source"] = file_path
-            documents.append(Document(page_content=page_content, metadata=metadata))
+            documents.append(
+                Document(page_content=page_content, metadata=metadata)
+            )
         else:
             documents.append(chunk)
 
-    print(f"--- Step 2: Extracting Graph Entities using LLM (Total Chunks: {len(documents)}) ---")
+    print(
+        f"--- Step 2: Extracting Graph Entities using LLM (Total Chunks: {len(documents)}) ---"
+    )
 
     for i, doc in enumerate(documents):
         try:
@@ -61,7 +72,9 @@ def build_knowledge_graph(
                     include_source=True,
                 )
         except Exception as e:
-            print(f"Warning: Failed to extract graph for chunk {i + 1} due to {e}. Skipping...")
+            print(
+                f"Warning: Failed to extract graph for chunk {i + 1} due to {e}. Skipping..."
+            )
 
     # ── Stamp all newly created __Entity__ nodes with doctor_id ──────────────
     print(f"--- Step 3: Stamping nodes with doctor_id={doctor_id} ---")
@@ -74,4 +87,5 @@ def build_knowledge_graph(
         print(f"Warning: Could not stamp doctor_id on nodes: {e}")
 
     print("--- Knowledge Graph Construction Complete! ---")
-    graph_store._driver.close()
+    graph_store._driver.close()  
+    print("--- well done RAOUF  ---")

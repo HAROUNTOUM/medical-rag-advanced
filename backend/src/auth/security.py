@@ -10,7 +10,7 @@ import secrets
 import bcrypt
 from datetime import datetime, timedelta, timezone
 from typing import Optional
-
+import re
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -110,3 +110,32 @@ def generate_api_key() -> tuple[str, str, str]:
 def verify_api_key(raw: str, key_hash: str) -> bool:
     """Verify a raw API key against its stored bcrypt hash."""
     return verify_password(raw, key_hash)
+
+def check_query_validity(query: str) -> bool:
+    """
+    Validates the incoming medical RAG query to ensure it is safe,
+    non-empty, and free from basic injection attempts.
+    """
+    if not query or not isinstance(query, str):
+        print("[SECURITY] Query validation failed: Input is empty or not a string.")
+        return False
+    
+    clean_query = query.strip()
+    if len(clean_query) < 3:
+        print("[SECURITY] Query validation failed: Input is too short.")
+        return False
+
+    # حماية ضد محاولات الـ Cypher Injection لقاعدة بيانات Neo4j
+    forbidden_patterns = [
+        r"MATCH\s*\(", 
+        r"DROP\s*CONSTRAINT", 
+        r"DELETE\s*n", 
+        r"REMOVE\s*n"
+    ]
+    
+    for pattern in forbidden_patterns:
+        if re.search(pattern, clean_query, re.IGNORECASE):
+            print(f"[SECURITY] Query validation failed: Forbidden pattern detected.")
+            return False
+
+    return True

@@ -9,6 +9,7 @@ from src.graphdb.neo4j_client import graph_db
 from src.vectordb.weaviate_client import vector_db
 from src.query.query_normalizer import normalize_query
 from src.query.query_rewriter import rewrite_query
+from src.auth.security import check_query_validity
 
 
 def run_health_checks():
@@ -144,7 +145,9 @@ def main():
             return
 
     # Default: Run a sample query through the agentic workflow
-    query = "What diseases affect the skin?"
+    query = "What is the best treatment for diabetes?"
+    check_query_validity(query)
+    print(f"   - Normalized query: {query}")
     result = run_agentic_workflow(query)
 
     print("\n" + "=" * 30)
