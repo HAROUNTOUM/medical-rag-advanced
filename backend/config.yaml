@@ -1,0 +1,27 @@
+
+# Medical-RAG Advanced — Application Configuration
+# These values are the defaults. They can be overridden by environment variables.
+
+llm:
+  model: "llama-3.1-8b-instant"   # Groq model for query, NER, rewriting, and synthesis
+  max_tokens: 500                  # Max tokens for synthesis response
+  ner_max_tokens: 150              # Max tokens for entity extraction
+  rewrite_max_tokens: 100          # Max tokens for query rewriting
+
+embeddings:
+  model: "nomic-embed-text"        # Ollama embedding model for vector ingestion and search
+
+retrieval:
+  top_k: 5                         # Default number of results to retrieve per source
+  merge_multiplier: 2              # Merged retriever returns top_k * merge_multiplier docs
+  chunk_sentences: 4               # Sentences per chunk during PDF ingestion
+  chunk_overlap: 1                 # Sentence overlap between chunks
+
+weaviate:
+  collection_name: "MedicalBook"  # Weaviate collection name
+
+neo4j: {}
+
+api:
+  host: "0.0.0.0"
+  port: 8000

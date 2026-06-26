@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* RADOCT Healthcare - Blue & White Color Palette */
+    --background: 0 0% 100%;
+    --foreground: 215 16.7% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 16.7% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 16.7% 20%;
+
+    /* Professional Blue for primary actions */
+    --primary: 217 100% 43.9%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Light blue for secondary */
+    --secondary: 217 92% 76%;
+    --secondary-foreground: 217 100% 43.9%;
+
+    --muted: 215 15.8% 97.3%;
+    --muted-foreground: 215 13.8% 34.9%;
+
+    /* Blue accent */
+    --accent: 217 100% 43.9%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Red for alerts */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 15.8% 92.3%;
+    --input: 215 15.8% 92.3%;
+    --ring: 217 100% 43.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 215 28% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 215 28% 16%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 215 28% 16%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 217 100% 56.1%;
+    --primary-foreground: 215 28% 8%;
+
+    --secondary: 217 92% 56%;
+    --secondary-foreground: 215 28% 8%;
+
+    --muted: 215 27.8% 25%;
+    --muted-foreground: 215 15.8% 70%;
+
+    --accent: 217 100% 56.1%;
+    --accent-foreground: 215 28% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 27.8% 25%;
+    --input: 215 27.8% 25%;
+    --ring: 217 100% 56.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
